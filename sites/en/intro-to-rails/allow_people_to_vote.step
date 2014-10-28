@@ -4,19 +4,20 @@ goals {
 
 steps {
 
-  step "Add a new controller action for voting" do
-    message "Edit `app/controllers/topics_controller.rb` and add this method at the end of the controller, above the `private` keyword:"
+  step "Generate a new controller for voting" do
+    message "Generate a new controller that will be used to manage votes"
+    console "rails generate controller votes"
 
     source_code :ruby, <<-RUBY
-      def upvote
-        @topic = Topic.find(params[:id])
+      def create
+        @topic = Topic.find(params[:topic_id])
         @topic.votes.create
         redirect_to(topics_path)
       end
     RUBY
 
     message <<-MARKDOWN
-      * `@topic = Topic.find(params[:id])` finds the topic in the database with that id and stores it in the variable `@topic`.
+      * `@topic = Topic.find(params[:topic_id])` finds the topic in the database with that id and stores it in the variable `@topic`.
       * `@topic.votes.create` creates a new vote for the current topic and saves it in the database.
       * `redirect_to(topics_path)` tells the browser to go back to topics_path (the topics list).
     MARKDOWN
@@ -31,18 +32,22 @@ steps {
     message "Replace that line so it looks like this:"
     source_code :ruby, <<-RUBY
       resources :topics do
-        member do
-          post 'upvote'
-        end
+        resources :votes, only: [:create]
       end
     RUBY
+
+    message <<-MARKDOWN
+      Resources can be nested to better reflect the relationship between your models. In our project, votes are always related to topics so we are choosing to nest votes within topics.
+
+      Our new VotesController can only be accessed through a topic.
+    MARKDOWN
 
     message <<-MARKDOWN
       Verify that route route was added successfully by checking the output of `rake routes` or [http://localhost:3000/rails/info](http://localhost:3000/rails/info). You should see a line that looks like this:
 
       ```
-            Prefix Verb   URI Pattern                  Controller#Action
-      upvote_topic POST   /topics/:id/upvote(.:format) topics#upvote
+            Prefix Verb   URI Pattern                       Controller#Action
+       topic_votes POST   /topics/:topic_id/votes(.:format)      votes#create
       ```
     MARKDOWN
   end
@@ -57,7 +62,7 @@ steps {
           <td><%= topic.title %></td>
           <td><%= topic.description %></td>
           <td><%= pluralize(topic.votes.count, "vote") %></td>
-          <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+          <td><%= button_to '+1', topic_votes_path(topic), method: :post %></td>
           <td><%= link_to 'Show', topic %></td>
           <td><%= link_to 'Edit', edit_topic_path(topic) %></td>
           <td><%= link_to 'Destroy', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -68,8 +73,8 @@ steps {
     message <<-MARKDOWN
       * `pluralize(topic.votes.count, "vote")` displays the number of votes the topic has, plus the word 'vote' or 'votes' accordingly.
       * `button_to '+1'` creates an html button with the text '+1'.
-      * `upvote_topic_path(topic)` creates the appropriate URL for the action we want to invoke. In this case, we want to upvote the current topic.
-        * `upvote_topic_path(topic)` would return `/topics/42/upvote` (if topic.id was 42)
+      * `topic_votes_path(topic)` creates the appropriate URL for the action we want to invoke. In this case, we want to upvote the current topic.
+        * `topic_votes_path(topic)` would return `/topics/42/votes` (if topic.id was 42)
       * `method: :post` ensures we do the create action of CRUD, not the read action.
     MARKDOWN
   end
