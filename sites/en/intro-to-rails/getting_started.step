@@ -12,7 +12,7 @@ steps do
   step do
     insert 'switch_to_home_directory'
   end
-  
+
   step do
     console "mkdir railsbridge"
     message "This command creates a new directory for us to store our project in."
@@ -51,13 +51,7 @@ steps do
     message <<-MARKDOWN
 Open the suggestotron folder as a project in your text editor.
 
-In **Sublime Text 2**, you can use the `Project > Add Folder to Project...` menu option:
-
-![Sublime Text Project menu screenshot](img/sublime_add_folder_to_project.png)
-
-Select your `suggestotron` folder from the file picker that opens. If everything works out Sublime should show the directories of your app in a tree structure on the left:
-
-![Screenshot of Suggestotron project folder tree in Sublime Text](img/sublime_project_as_folder.png)
+Select your `suggestotron` folder from the file picker that opens. If everything works out you should see the directories of your app in a tree structure on the left of your editor:
     MARKDOWN
   end
 

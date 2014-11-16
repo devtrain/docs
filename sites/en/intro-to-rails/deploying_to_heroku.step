@@ -18,7 +18,7 @@ situation "First-time setup" do
 
     message "Heroku will run our application slightly differently than our development computer does, which requires us to make a small change to our `Gemfile`."
 
-    message "Open the file called `Gemfile` in Sublime Text, or your preferred editor, and find the line containing:"
+    message "Open the file called `Gemfile` in your editor, or your preferred editor, and find the line containing:"
 
     source_code :ruby, <<-RUBY
 gem 'sqlite3'
