@@ -8,6 +8,10 @@ steps {
     message "Generate a new controller that will be used to manage votes"
     console "rails generate controller votes"
 
+    message <<-MARKDOWN
+      Then define the `create` method inside the controller.
+    message
+
     source_code :ruby, <<-RUBY
       def create
         @topic = Topic.find(params[:topic_id])
