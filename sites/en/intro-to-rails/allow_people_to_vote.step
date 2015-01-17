@@ -10,7 +10,7 @@ steps {
 
     message <<-MARKDOWN
       Then define the `create` method inside the controller.
-    message
+    MARKDOWN
 
     source_code :ruby, <<-RUBY
       def create
